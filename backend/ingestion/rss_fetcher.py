@@ -2,11 +2,11 @@ import feedparser
 from datetime import datetime, timezone
 
 RSS_FEEDS = {
-    "cnn": "http://rss.cnn.com/rss/cnn_topstories.rss",
-    "bbc": "http://feeds.bbci.co.uk/news/world/rss.xml",
-    "aljazeera": "https://www.aljazeera.com/xml/rss/all.xml",
-    "guardian": "https://www.theguardian.com/world/rss",
-    "npr": "https://feeds.npr.org/1001/rss.xml"
+    "CNN": "http://rss.cnn.com/rss/cnn_topstories.rss",
+    "BBC": "http://feeds.bbci.co.uk/news/world/rss.xml",
+    "Al Jazeera": "https://www.aljazeera.com/xml/rss/all.xml",
+    "The Guardian": "https://www.theguardian.com/world/rss",
+    "NPR": "https://feeds.npr.org/1001/rss.xml"
 }
 
 def fetch_articles(limit=10):
