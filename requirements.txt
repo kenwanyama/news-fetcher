@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+feedparser
+requests
+beautifulsoup4
+pandas
+sqlalchemy
+transformers
+torch
+scikit-learn
+pyscopg2-binary
