@@ -12,6 +12,14 @@ init_db()
 
 
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    start_scheduler()
+    yield
+
+app = FastAPI(title="News Feed", lifespan=lifespan)
+
 # Allow your React frontend to access
 origins = [
     "http://localhost:3000",  # local React dev
@@ -25,13 +33,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Startup
-    start_scheduler()
-    yield
-
-app = FastAPI(title="News Feed", lifespan=lifespan)
 
 # Dependency: get DB session
 def get_db():
