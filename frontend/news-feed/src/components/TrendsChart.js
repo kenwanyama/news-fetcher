@@ -1,9 +1,9 @@
 import React from "react";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, XAxis, ResponsiveContainer } from "recharts";
 
 const TrendsChart = ({ trends }) => {
   const topicData = Object.entries(trends.topic_counts || {}).map(([key, value]) => ({ name: key, count: value }));
-  const sentimentData = Object.entries(trends.sentiment_counts || {}).map(([key, value]) => ({ name: key, count: value }));
+ 
 
   return (
  
