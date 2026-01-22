@@ -24,8 +24,9 @@ app = FastAPI(title="News Feed", lifespan=lifespan)
 origins = [
     "http://localhost:3000",  # local React dev
     "https://kenwanyama.vercel.app",  # production portfolio
-    "https://briefly-bjdth7uq3-kenwanyamas-projects.vercel.app",  # your Vercel URL
+    "https://briefly-5ux9gedxb-kenwanyamas-projects.vercel.app",  # your Vercel URL
     "https://brief-ly.vercel.app",  # if you have a custom domain
+    "*"
 ]
 app.add_middleware(
     CORSMiddleware,
