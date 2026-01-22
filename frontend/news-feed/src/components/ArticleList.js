@@ -1,16 +1,28 @@
 import React from "react";
 
-const ArticleList = ({ articles }) => {
+const ArticleList = ({ articles, activeTopic }) => {
+  const filteredArticles =
+    activeTopic === "ALL"
+      ? articles
+      : articles.filter(a => a.topic === activeTopic);
+
   return (
     <div>
-      <h2>Latest Articles</h2>
-      {articles.map((article) => (
-        <div key={article.id} style={{ border: "1px solid #ddd", margin: "10px", padding: "10px" }}>
+      {filteredArticles.map((article) => (
+        <div key={article.id} className="article-card">
           <h3>{article.title}</h3>
-          <p><strong>Source:</strong> {article.source}</p>
-          <p><strong>Topic:</strong> {article.topic} | <strong>Sentiment:</strong> {article.sentiment}</p>
-          <p>{article.generated_summary}</p>
-          <a href={article.link} target="_blank" rel="noreferrer">Read full article</a>
+          <p className="article-meta">
+            [{article.source.toUpperCase()}] — TOPIC: {article.topic} — SENTIMENT:{" "}
+            <span className={`sentiment ${article.sentiment.toLowerCase()}`}>
+              {article.sentiment.replace("LABEL_", "")}
+            </span>
+          </p>
+          <p className="article-summary">
+            {article.generated_summary}
+          </p>
+          <a href={article.link} target="_blank" rel="noreferrer">
+            Read full article →
+          </a>
         </div>
       ))}
     </div>

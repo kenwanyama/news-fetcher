@@ -6,24 +6,39 @@ import TrendsChart from "./components/TrendsChart";
 function App() {
   const [articles, setArticles] = useState([]);
   const [trends, setTrends] = useState({});
+  const [activeTopic, setActiveTopic] = useState("ALL");
 
   useEffect(() => {
     const getData = async () => {
       const articlesData = await fetchArticles();
       setArticles(articlesData);
-
       const trendsData = await fetchTrends();
       setTrends(trendsData);
     };
     getData();
   }, []);
 
+  const topics = ["ALL", ...new Set(articles.map(a => a.topic))];
+
   return (
-    <div style={{ maxWidth: "900px", margin: "auto", padding: "20px" }}>
-      <h1>Brief.ly</h1>
-      <h2>News at a glance</h2>
+    <div className="app-container">
+      <h1 className="app-title">Brief.ly</h1>
+      <p className="subtitle">News at a glance</p>
       <TrendsChart trends={trends} />
-      <ArticleList articles={articles} />
+      
+      <div className="tabs">
+        {topics.map(topic => (
+          <button
+            key={topic}
+            className={`tab ${activeTopic === topic ? "active" : ""}`}
+            onClick={() => setActiveTopic(topic)}
+          >
+            {topic}
+          </button>
+        ))}
+      </div>
+
+      <ArticleList articles={articles} activeTopic={activeTopic} />
     </div>
   );
 }

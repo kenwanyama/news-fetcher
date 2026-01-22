@@ -6,31 +6,23 @@ const TrendsChart = ({ trends }) => {
   const sentimentData = Object.entries(trends.sentiment_counts || {}).map(([key, value]) => ({ name: key, count: value }));
 
   return (
-    <div>
-      <h2>Article Trends</h2>
-      <h3>Topics</h3>
-      <ResponsiveContainer width="100%" height={300}>
+ 
+    <div className="chart-box">
+      <h3>TOPIC DISTRIBUTION</h3>
+      <ResponsiveContainer width="80%" height={400}>
         <BarChart data={topicData}>
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Bar dataKey="count" fill="#8884d8" />
-        </BarChart>
-      </ResponsiveContainer>
-
-      <h3>Sentiments</h3>
-      <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={sentimentData}>
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Bar dataKey="count" fill="#82ca9d" />
+          <XAxis 
+          dataKey="name" 
+          tick={{ fontSize: 11 }}
+          angle={-45}
+          textAnchor="end"
+          height={50}
+        />
+          <Bar dataKey="count" fill="#2e6f40" radius={0} />
         </BarChart>
       </ResponsiveContainer>
     </div>
-  );
+);
 };
 
 export default TrendsChart;

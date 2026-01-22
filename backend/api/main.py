@@ -1,14 +1,16 @@
 from fastapi import FastAPI, HTTPException, Depends
+from fastapi.concurrency import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from typing import List
 from backend.storage.database import SessionLocal, Article, init_db
+from backend.app.scheduler import start_scheduler
 
 from fastapi.responses import JSONResponse
 # Initialize DB 
 init_db()
 
-app = FastAPI(title="News Intelligence API")
+app = FastAPI(title="News Feed")
 
 # Allow your React frontend to access
 origins = [
@@ -21,6 +23,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    start_scheduler()
+    yield
 
 # Dependency: get DB session
 def get_db():

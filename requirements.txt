@@ -9,3 +9,4 @@ transformers
 torch
 scikit-learn
 pyscopg2-binary
+apscheduler

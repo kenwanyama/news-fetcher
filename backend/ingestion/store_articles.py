@@ -17,6 +17,7 @@ def store_articles():
             continue
 
         text = item["summary"] or item["title"]
+        topic = classify_topic(text)
 
         article = Article(
             title=item["title"],
@@ -25,8 +26,8 @@ def store_articles():
             source=item["source"],
             published=item["published"],
             fetched_at=item["fetched_at"],
-            topic=classify_topic(text),
-            sentiment=analyze_sentiment(text),
+            topic=topic,
+            sentiment=analyze_sentiment(item, topic),
             generated_summary=summarize_text(text)
         )
         session.add(article)
