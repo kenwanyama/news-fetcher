@@ -1,9 +1,5 @@
-from unittest import result
+from functools import lru_cache
 from transformers import pipeline
-
-sentiment_analyzer = pipeline("sentiment-analysis",
-                              model="distilbert-base-uncased-finetuned-sst-2-english"
-)
 
 TOPIC_BIAS = {
     "CONFLICT": -0.3,
@@ -15,15 +11,23 @@ TOPIC_BIAS = {
     "SPORTS": 0.05
 }
 
+@lru_cache(maxsize=1)
+def get_sentiment_analyzer():
+    return pipeline(
+        "sentiment-analysis",
+        model="distilbert-base-uncased-finetuned-sst-2-english"
+    )
+
 def analyze_sentiment(article, topic):
     text = article["title"] + " " + article["summary"]
 
     if not text.strip():
         return "NEUTRAL"
 
+    sentiment_analyzer = get_sentiment_analyzer()
     result = sentiment_analyzer(text)[0]
-    score = result["score"]
 
+    score = result["score"]
     if result["label"] == "NEGATIVE":
         score = -score
 
