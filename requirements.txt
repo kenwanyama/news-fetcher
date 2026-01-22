@@ -8,5 +8,4 @@ transformers==4.35.2
 apscheduler==3.11.2
 huggingface-hub>=0.20.0
 legacy-cgi
---extra-index-url https://download.pytorch.org/whl/cpu
-torch==2.1.0+cpu
+torch==2.5.1
