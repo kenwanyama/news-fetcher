@@ -10,7 +10,7 @@ from fastapi.responses import JSONResponse
 # Initialize DB 
 init_db()
 
-app = FastAPI(title="News Feed")
+
 
 # Allow your React frontend to access
 origins = [
@@ -20,6 +20,7 @@ origins = [
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -29,6 +30,8 @@ async def lifespan(app: FastAPI):
     # Startup
     start_scheduler()
     yield
+
+app = FastAPI(title="News Feed", lifespan=lifespan)
 
 # Dependency: get DB session
 def get_db():
