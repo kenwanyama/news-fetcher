@@ -9,7 +9,7 @@ RSS_FEEDS = {
     "NPR": "https://feeds.npr.org/1001/rss.xml"
 }
 
-def fetch_articles(limit=10):
+def fetch_articles(limit=5):
     articles = []
 
     for source, url in RSS_FEEDS.items():
