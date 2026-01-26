@@ -10,7 +10,7 @@ from fastapi.responses import JSONResponse
 # Initialize DB 
 init_db()
 
-
+app = FastAPI(title="News Feed", lifespan=lifespan)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -18,14 +18,14 @@ async def lifespan(app: FastAPI):
     start_scheduler()
     yield
 
-app = FastAPI(title="News Feed", lifespan=lifespan)
 
-# Allow your React frontend to access
+
+# Allow React frontend to access
 origins = [
     "http://localhost:3000",  # local React dev
     "https://kenwanyama.vercel.app",  # production portfolio
     "https://briefly-5ux9gedxb-kenwanyamas-projects.vercel.app",  # your Vercel URL
-    "https://brief-ly.vercel.app"  # if you have a custom domain
+    "https://brief-ly.vercel.app"  
 ]
 app.add_middleware(
     CORSMiddleware,
