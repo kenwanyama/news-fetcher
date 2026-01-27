@@ -10,7 +10,7 @@ def store_articles():
     init_db()
     session = SessionLocal()
 
-    articles = fetch_articles(limit=20)
+    articles = fetch_articles()
 
     count=0
     for item in articles:
