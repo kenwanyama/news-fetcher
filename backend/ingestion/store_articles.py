@@ -3,14 +3,16 @@ from backend.ingestion.rss_fetcher import fetch_articles
 from backend.nlp.topic_classifier import classify_topic
 from backend.nlp.sentiment import analyze_sentiment
 from backend.nlp.summarizer import summarize_text
+import gc
 
 
 def store_articles():
     init_db()
     session = SessionLocal()
 
-    articles = fetch_articles()
+    articles = fetch_articles(limit=20)
 
+    count=0
     for item in articles:
         exists = session.query(Article).filter_by(link=item["link"]).first()
         if exists:
@@ -18,7 +20,8 @@ def store_articles():
 
         text = item["summary"] or item["title"]
         topic = classify_topic(text)
-
+        
+        
         article = Article(
             title=item["title"],
             summary=item["summary"],
@@ -31,9 +34,13 @@ def store_articles():
             generated_summary=summarize_text(text)
         )
         session.add(article)
+        if count % 5 == 0:
+            session.commit()
+            gc.collect()
 
     session.commit()
     session.close()
+    gc.collect()
 
 if __name__ == "__main__":
     store_articles()
