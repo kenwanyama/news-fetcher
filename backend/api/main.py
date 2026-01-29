@@ -10,14 +10,13 @@ from fastapi.responses import JSONResponse
 # Initialize DB 
 init_db()
 
-app = FastAPI(title="News Feed")
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
     start_scheduler()
     yield
 
+app = FastAPI(title="News Feed", lifespan=lifespan)
 
 
 # Allow React frontend to access
