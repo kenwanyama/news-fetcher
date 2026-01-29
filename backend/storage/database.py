@@ -3,8 +3,6 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 from pathlib import Path
 import os
 
-
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 engine = create_engine(DATABASE_URL, pool_pre_ping=True, echo=False)
