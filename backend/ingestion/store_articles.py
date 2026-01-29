@@ -4,7 +4,7 @@ from backend.ingestion.rss_fetcher import fetch_articles
 from backend.nlp.topic_classifier import classify_topic
 from backend.nlp.sentiment import analyze_sentiment
 from backend.nlp.summarizer import summarize_text
-
+import gc
 
 def store_articles():
     articles = fetch_articles()
@@ -44,6 +44,7 @@ def store_articles():
         raise
     finally:
         session.close()
+        gc.collect()
 
 
 if __name__ == "__main__":
