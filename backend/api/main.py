@@ -10,7 +10,7 @@ from fastapi.responses import JSONResponse
 # Initialize DB 
 init_db()
 
-app = FastAPI(title="News Feed", lifespan=lifespan)
+app = FastAPI(title="News Feed")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
