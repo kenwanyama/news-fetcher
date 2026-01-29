@@ -1,48 +1,18 @@
 from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime
 from sqlalchemy.orm import declarative_base, sessionmaker
 from pathlib import Path
-
-
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
-DB_PATH = BASE_DIR / "data" / "articles.db"
-DATABASE_URL =from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime
-from sqlalchemy.orm import declarative_base, sessionmaker
 import os
 
 
-DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    "postgresql://postgres:[PASS]@db.tbrdyexigfoxmytyhwfa.supabase.co:5432/postgres"
-)
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-engine = create_engine(DATABASE_URL, echo=False)
+engine = create_engine(DATABASE_URL, pool_pre_ping=True, echo=False)
 SessionLocal = sessionmaker(bind=engine)
 Base = declarative_base()
 
 class Article(Base):
     __tablename__ = "articles"
-    id = Column(Integer, primary_key=True)
-    title = Column(String)
-    summary = Column(Text)
-    link = Column(String, unique=True)
-    source = Column(String)
-    published = Column(String)
-    fetched_at = Column(DateTime)
-    topic = Column(String)
-    sentiment = Column(String)
-    generated_summary = Column(Text)
-
-def init_db():
-    Base.metadata.create_all(engine)
-
-engine = create_engine(DATABASE_URL, echo=False)
-SessionLocal = sessionmaker(bind=engine)
-
-Base = declarative_base()
-
-class Article(Base):
-    __tablename__ = "articles"
-
     id = Column(Integer, primary_key=True)
     title = Column(String)
     summary = Column(Text)
