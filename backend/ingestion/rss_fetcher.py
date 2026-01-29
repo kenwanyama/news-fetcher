@@ -25,6 +25,8 @@ def fetch_articles(limit=5):
                 "fetched_at": datetime.now(timezone.utc)
             })
 
+    random.shuffle(articles)
+
     return articles
 
 
