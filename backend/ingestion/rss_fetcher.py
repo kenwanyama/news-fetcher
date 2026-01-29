@@ -1,5 +1,6 @@
 import feedparser
 from datetime import datetime, timezone
+import random
 
 RSS_FEEDS = {
     "CNN": "http://rss.cnn.com/rss/cnn_topstories.rss",
