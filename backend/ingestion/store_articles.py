@@ -1,46 +1,50 @@
-from backend.storage.database import SessionLocal, Article, init_db
+from sqlalchemy.exc import IntegrityError
+from backend.storage.database import SessionLocal, Article
 from backend.ingestion.rss_fetcher import fetch_articles
 from backend.nlp.topic_classifier import classify_topic
 from backend.nlp.sentiment import analyze_sentiment
 from backend.nlp.summarizer import summarize_text
-import gc
 
 
 def store_articles():
-    init_db()
-    session = SessionLocal()
-
     articles = fetch_articles()
+    session = SessionLocal()
+    count = 0
 
-    count=0
-    for item in articles:
-        exists = session.query(Article).filter_by(link=item["link"]).first()
-        if exists:
-            continue
+    try:
+        for item in articles:
+            if session.query(Article).filter_by(link=item["link"]).first():
+                continue
 
-        text = item["summary"] or item["title"]
-        topic = classify_topic(text)
-        
-        
-        article = Article(
-            title=item["title"],
-            summary=item["summary"],
-            link=item["link"],
-            source=item["source"],
-            published=item["published"],
-            fetched_at=item["fetched_at"],
-            topic=topic,
-            sentiment=analyze_sentiment(item, topic),
-            generated_summary=summarize_text(text)
-        )
-        session.add(article)
-        if count % 5 == 0:
-            session.commit()
-            gc.collect()
+            text = item["summary"] or item["title"]
+            topic = classify_topic(text)
 
-    session.commit()
-    session.close()
-    gc.collect()
+            article = Article(
+                title=item["title"],
+                summary=item["summary"],
+                link=item["link"],
+                source=item["source"],
+                published=item["published"],
+                fetched_at=item["fetched_at"],
+                topic=topic,
+                sentiment=analyze_sentiment(item, topic),
+                generated_summary=summarize_text(text),
+            )
+
+            session.add(article)
+            count += 1
+
+            if count % 5 == 0:
+                session.commit()
+
+        session.commit()
+
+    except Exception:
+        session.rollback()
+        raise
+    finally:
+        session.close()
+
 
 if __name__ == "__main__":
     store_articles()
