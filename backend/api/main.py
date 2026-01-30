@@ -77,23 +77,6 @@ def get_articles_by_topic(topic_name: str, db: Session = Depends(get_db)):
         } for a in articles
         ]
 
-@app.get("/articles/sentiment/{sentiment_label}", response_class=JSONResponse)
-def get_articles_by_sentiment(sentiment_label: str, db: Session = Depends(get_db)):
-    articles = db.query(Article).filter(Article.sentiment==sentiment_label).all()
-    if not articles:
-        raise HTTPException(status_code=404, detail="No articles found for this sentiment")
-    return [{
-            "title": a.title,
-            "summary": a.summary,
-            "link": a.link,
-            "source": a.source,
-            "published": a.published,
-            "fetched_at": str(a.fetched_at),
-            "topic": a.topic,
-            "sentiment": a.sentiment,
-            "generated_summary": a.generated_summary
-        } for a in articles
-    ]
 
 @app.get("/articles/trends", response_class=JSONResponse)
 def get_trends(db: Session = Depends(get_db)):
