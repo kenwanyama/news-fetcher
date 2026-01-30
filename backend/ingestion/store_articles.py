@@ -43,6 +43,7 @@ def store_articles():
         session.rollback()
         raise
     finally:
+        print(f"Fetched {len(articles)} articles")
         session.close()
         gc.collect()
 
