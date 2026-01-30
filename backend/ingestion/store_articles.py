@@ -35,6 +35,7 @@ def store_articles():
             count += 1
 
             if count % 5 == 0:
+                print(f"Fetched {len(articles)} articles")
                 session.commit()
 
         session.commit()
