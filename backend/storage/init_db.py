@@ -1,5 +1,4 @@
-from backend.storage.database import engine, Base
-from backend.storage.models import Article  
+from backend.storage.database import engine, Article, Base
 
 def init_db():
     Base.metadata.create_all(bind=engine)
