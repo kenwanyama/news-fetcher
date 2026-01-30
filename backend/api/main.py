@@ -82,15 +82,12 @@ def get_articles_by_topic(topic_name: str, db: Session = Depends(get_db)):
 def get_trends(db: Session = Depends(get_db)):
     # Count articles per topic
     topics = db.query(Article.topic).all()
-    sentiments = db.query(Article.sentiment).all()
 
     topic_counts = {}
-    sentiment_counts = {}
+
 
     for t in topics:
         topic_counts[t[0]] = topic_counts.get(t[0], 0) + 1
 
-    for s in sentiments:
-        sentiment_counts[s[0]] = sentiment_counts.get(s[0], 0) + 1
 
-    return {"topic_counts": topic_counts, "sentiment_counts": sentiment_counts}
+    return {"topic_counts": topic_counts}
