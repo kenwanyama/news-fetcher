@@ -4,8 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from fastapi.responses import JSONResponse
 
-from backend.storage.database import SessionLocal
-from backend.storage.models import Article
+from backend.storage.database import Article, SessionLocal
 from backend.app.scheduler import start_scheduler
 
 
