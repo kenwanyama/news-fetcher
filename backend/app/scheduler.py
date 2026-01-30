@@ -1,8 +1,11 @@
 def start_scheduler():
     from backend.ingestion.store_articles import store_articles
 
-    store_articles()
-
+    # Run immediately on startup
+    try:
+        store_articles()
+    except Exception as e:
+        print("Startup fetch/store failed:", e)
 
     scheduler = BackgroundScheduler()
     scheduler.add_job(
