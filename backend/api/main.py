@@ -6,10 +6,12 @@ from fastapi.responses import JSONResponse
 
 from backend.storage.database import Article, SessionLocal
 from backend.app.scheduler import start_scheduler
+from backend.app.nlp_loader import nlp_loader
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    nlp_loader()
     start_scheduler()
     yield
 
