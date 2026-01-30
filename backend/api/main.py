@@ -1,20 +1,19 @@
 from fastapi import FastAPI, HTTPException, Depends
-from fastapi.concurrency import asynccontextmanager
+from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
-from typing import List
-from backend.storage.database import SessionLocal, Article, init_db
+from fastapi.responses import JSONResponse
+
+from backend.storage.database import SessionLocal
+from backend.storage.models import Article
 from backend.app.scheduler import start_scheduler
 
-from fastapi.responses import JSONResponse
-# Initialize DB 
-init_db()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup
     start_scheduler()
     yield
+
 
 app = FastAPI(title="News Feed", lifespan=lifespan)
 
