@@ -22,5 +22,3 @@ class Article(Base):
     sentiment = Column(String)
     generated_summary = Column(Text)
 
-def init_db():
-    Base.metadata.create_all(engine)
