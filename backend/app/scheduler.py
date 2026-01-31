@@ -1,5 +1,5 @@
 def start_scheduler():
-    from backend.ingestion.store_articles import store_articles
+    from backend.ingestion.store_articles import store_articles processing_articles
 
     # Run immediately on startup
     try:
