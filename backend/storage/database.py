@@ -11,14 +11,21 @@ Base = declarative_base()
 
 class Article(Base):
     __tablename__ = "articles"
-    id = Column(Integer, primary_key=True)
-    title = Column(String)
-    summary = Column(Text)
-    link = Column(String, unique=True)
-    source = Column(String)
-    published = Column(String)
-    fetched_at = Column(DateTime)
-    topic = Column(String)
-    sentiment = Column(String)
-    generated_summary = Column(Text)
+    
+    title = Column(String, nullable=False)
+    summary = Column(Text, nullable=True)
+    link = Column(String, unique=True, nullable=False)
+    source = Column(String, nullable=False)
+    published = Column(String, nullable=True)
+    fetched_at = Column(DateTime, nullable=False)
+
+    # to be loaded later 
+    topic = Column(String, nullable=True)
+    sentiment = Column(String, nullable=True)
+    generated_summary = Column(Text, nullable=True)
+
+    # processing state
+    processed = Column(Boolean, default=False, nullable=False)
+
+
 
