@@ -19,10 +19,9 @@ app = FastAPI(title="News Feed", lifespan=lifespan)
 
 # Allow React frontend to access
 origins = [
-    "http://localhost:3000",  # local React dev
-    "https://kenwanyama.vercel.app",  # production portfolio
-    "https://briefly-5ux9gedxb-kenwanyamas-projects.vercel.app",  # your Vercel URL
-    "https://brief-ly.vercel.app"  
+    "http://localhost:3000",
+    "https://brief-ly.vercel.app",
+    "https://*.vercel.app"  
 ]
 app.add_middleware(
     CORSMiddleware,
