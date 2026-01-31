@@ -11,7 +11,7 @@ Base = declarative_base()
 
 class Article(Base):
     __tablename__ = "articles"
-    
+    id = Column(Integer, primary_key=True)
     title = Column(String, nullable=False)
     summary = Column(Text, nullable=True)
     link = Column(String, unique=True, nullable=False)
