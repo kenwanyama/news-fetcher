@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime
+from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime, Boolean
 from sqlalchemy.orm import declarative_base, sessionmaker
 from pathlib import Path
 import os
