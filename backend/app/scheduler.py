@@ -1,13 +1,12 @@
 from apscheduler.schedulers.background import BackgroundScheduler
-from backend.services.ingest import fetch_and_store_articles
-from backend.services.nlp_worker import process_unprocessed_articles
+from backend.ingestion.store_particles import store_articles, processing_articles
 
 def start_scheduler():
     scheduler = BackgroundScheduler()
 
     # RSS ingestion 
     scheduler.add_job(
-        fetch_and_store_articles,
+        store_articles,
         trigger="interval",
         minutes=15,
         id="rss_ingestion",
@@ -16,7 +15,7 @@ def start_scheduler():
 
     # NLP processing 
     scheduler.add_job(
-        process_unprocessed_articles,
+        processing_articles,
         trigger="interval",
         minutes=10,
         id="nlp_processing",
