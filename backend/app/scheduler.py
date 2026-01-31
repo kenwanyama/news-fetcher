@@ -10,7 +10,8 @@ def start_scheduler():
         trigger="interval",
         minutes=15,
         id="rss_ingestion",
-        replace_existing=True
+        replace_existing=True,
+        
     )
 
     # NLP processing 
@@ -19,7 +20,14 @@ def start_scheduler():
         trigger="interval",
         minutes=10,
         id="nlp_processing",
-        replace_existing=True
+        replace_existing=True,
+        
     )
 
     scheduler.start()
+
+
+    try:
+        store_articles()
+    except Exception as e:
+        print(f"Error during initial fetch: {e}")
