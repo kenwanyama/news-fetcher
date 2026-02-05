@@ -13,7 +13,7 @@ const ArticleList = ({ articles, activeTopic }) => {
           <h3>{article.title}</h3>
           <p className="article-meta">
             [{article.source.toUpperCase()}] — TOPIC: {article.topic} — SENTIMENT:{" "}
-            <span className={`sentiment ${article.sentiment.toLowerCase()}`}>
+            <span className={`sentiment ${article.sentiment?.toLowerCase()}`}>
               {article.sentiment?.replace("LABEL_", "") || "Processing..."}
             </span>
           </p>
