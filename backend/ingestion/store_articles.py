@@ -34,7 +34,7 @@ def store_articles():
             )
             
             session.add(article)
-            count += 1  # moved inside the loop
+            count += 1 
           
         session.commit()
     except IntegrityError:
