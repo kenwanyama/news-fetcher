@@ -14,7 +14,7 @@ const ArticleList = ({ articles, activeTopic }) => {
           <p className="article-meta">
             [{article.source.toUpperCase()}] — TOPIC: {article.topic} — SENTIMENT:{" "}
             <span className={`sentiment ${article.sentiment.toLowerCase()}`}>
-              {article.sentiment.replace("LABEL_", "")}
+              {article.sentiment?.replace("LABEL_", "") || "Processing..."}
             </span>
           </p>
           <p className="article-summary">
