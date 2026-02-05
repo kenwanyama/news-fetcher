@@ -1,10 +1,3 @@
-from sqlalchemy.exc import IntegrityError
-from backend.storage.database import SessionLocal, Article
-from backend.ingestion.rss_fetcher import fetch_articles
-from backend.nlp.topic_classifier import classify_topic
-from backend.nlp.sentiment import analyze_sentiment
-from backend.nlp.summarizer import summarize_text
-
 def store_articles():
     articles = fetch_articles()
     session = SessionLocal()
@@ -18,7 +11,7 @@ def store_articles():
             
             text = item["summary"] or item["title"]
             
-            #NLP processing
+            # NLP processing
             topic = classify_topic(text)
             sentiment = analyze_sentiment(
                 {"title": item["title"], "summary": item["summary"]}, 
@@ -41,13 +34,15 @@ def store_articles():
             )
             
             session.add(article)
-        count += 1
+            count += 1  # moved inside the loop
           
         session.commit()
+    except IntegrityError:
+        session.rollback()
+        print("Duplicate article detected, rollback performed")
     except Exception as e:
         session.rollback()
         print(f"Error storing/processing articles: {e}")
     finally:
         print(f"Fetched {len(articles)} articles, added {count} new")
         session.close()
-
