@@ -14,15 +14,15 @@ def start_scheduler():
         
     )
 
-    # NLP processing 
-    #scheduler.add_job(
-    #    processing_articles,
-    #    trigger="interval",
-    #    minutes=10,
-    #    id="nlp_processing",
-    #    replace_existing=True,
+     NLP processing 
+    scheduler.add_job(
+        processing_articles,
+        trigger="interval",
+        minutes=10,
+        id="nlp_processing",
+        replace_existing=True,
         
-    #)
+    )
 
     scheduler.start()
 
