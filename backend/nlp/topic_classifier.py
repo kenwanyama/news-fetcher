@@ -9,7 +9,7 @@ TOPIC_KEYWORDS = {
     "HEALTH": ["health", "medical", "hospital", "doctor", "disease", "vaccine", "drug", "covid", "pandemic", "treatment"],
     "CLIMATE": ["climate", "environment", "carbon", "emissions", "renewable", "pollution", "global warming", "sustainability"],
     "CONFLICT": ["war", "military", "attack", "conflict", "violence", "terror", "weapon", "soldier", "bombing"],
-    "SPORTS": ["sports", "football", "basketball", "soccer", "nba", "nfl", "game", "player", "championship", "team"]
+    "SPORTS": ["sports", "football", "basketball", "soccer", "nba", "nfl", "game", "player", "championship", "team", "world cup"]
 }
 
 # Create TF-IDF vectorizer (initialized once)
