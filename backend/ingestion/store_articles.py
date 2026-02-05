@@ -19,7 +19,7 @@ def store_articles():
             )
             summary = summarize_text(text)
             
-            # Create article with NLP data already included
+            
             article = Article(
                 title=item["title"],
                 summary=item["summary"],
