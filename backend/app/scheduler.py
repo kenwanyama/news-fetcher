@@ -1,5 +1,5 @@
 from apscheduler.schedulers.background import BackgroundScheduler
-from backend.ingestion.store_articles import store_articles, processing_articles
+from backend.ingestion.store_articles import store_articles
 
 def start_scheduler():
     scheduler = BackgroundScheduler()
