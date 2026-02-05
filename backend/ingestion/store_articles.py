@@ -41,13 +41,13 @@ def store_articles():
             )
             
             session.add(article)
-            new_count += 1
+        count += 1
           
         session.commit()
     except Exception as e:
         session.rollback()
         print(f"Error storing/processing articles: {e}")
     finally:
-        print(f"Fetched {len(articles)} articles, added {new_count} new, processed {processed_count}")
+        print(f"Fetched {len(articles)} articles, added {new_count} new")
         session.close()
 
