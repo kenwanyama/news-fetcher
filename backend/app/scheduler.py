@@ -14,7 +14,7 @@ def start_scheduler():
         
     )
 
-     NLP processing 
+     #NLP processing 
     scheduler.add_job(
         processing_articles,
         trigger="interval",
