@@ -1,30 +1,31 @@
-from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime
+from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime, Boolean
 from sqlalchemy.orm import declarative_base, sessionmaker
 from pathlib import Path
+import os
 
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
-DB_PATH = BASE_DIR / "data" / "articles.db"
-DATABASE_URL = f"sqlite:///{DB_PATH}"
-
-engine = create_engine(DATABASE_URL, echo=False)
+engine = create_engine(DATABASE_URL, pool_pre_ping=True, echo=False)
 SessionLocal = sessionmaker(bind=engine)
-
 Base = declarative_base()
 
 class Article(Base):
     __tablename__ = "articles"
-
     id = Column(Integer, primary_key=True)
-    title = Column(String)
-    summary = Column(Text)
-    link = Column(String, unique=True)
-    source = Column(String)
-    published = Column(String)
-    fetched_at = Column(DateTime)
-    topic = Column(String)
-    sentiment = Column(String)
-    generated_summary = Column(Text)
+    title = Column(String, nullable=False)
+    summary = Column(Text, nullable=True)
+    link = Column(String, unique=True, nullable=False)
+    source = Column(String, nullable=False)
+    published = Column(String, nullable=True)
+    fetched_at = Column(DateTime, nullable=False)
 
-def init_db():
-    Base.metadata.create_all(engine)
+    # to be loaded later 
+    topic = Column(String, nullable=True)
+    sentiment = Column(String, nullable=True)
+    generated_summary = Column(Text, nullable=True)
+
+    # processing state
+    processed = Column(Boolean, default=False, nullable=False)
+
+
+

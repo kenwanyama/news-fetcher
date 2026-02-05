@@ -8,4 +8,6 @@ transformers==4.35.2
 apscheduler==3.11.2
 huggingface-hub>=0.20.0
 legacy-cgi
-torch==2.5.1
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.5.1+cpu
+psycopg2-binary

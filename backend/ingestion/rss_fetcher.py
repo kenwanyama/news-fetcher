@@ -1,5 +1,6 @@
 import feedparser
 from datetime import datetime, timezone
+import random
 
 RSS_FEEDS = {
     "CNN": "http://rss.cnn.com/rss/cnn_topstories.rss",
@@ -9,7 +10,7 @@ RSS_FEEDS = {
     "NPR": "https://feeds.npr.org/1001/rss.xml"
 }
 
-def fetch_articles(limit=10):
+def fetch_articles(limit=5):
     articles = []
 
     for source, url in RSS_FEEDS.items():
@@ -24,6 +25,8 @@ def fetch_articles(limit=10):
                 "source": source,
                 "fetched_at": datetime.now(timezone.utc)
             })
+
+    random.shuffle(articles)
 
     return articles
 
