@@ -48,6 +48,6 @@ def store_articles():
         session.rollback()
         print(f"Error storing/processing articles: {e}")
     finally:
-        print(f"Fetched {len(articles)} articles, added {new_count} new")
+        print(f"Fetched {len(articles)} articles, added {count} new")
         session.close()
 
