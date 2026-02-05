@@ -4,6 +4,7 @@ from backend.ingestion.rss_fetcher import fetch_articles
 from backend.nlp.topic_classifier import classify_topic
 from backend.nlp.sentiment import analyze_sentiment
 from backend.nlp.summarizer import summarize_text
+from datetime import datetime
 import gc
 
 def store_articles(batch_size=5):
@@ -13,26 +14,36 @@ def store_articles(batch_size=5):
     added_count = 0
 
     for item in articles:
-        # Skip if article already exists
-        if session.query(Article).filter_by(link=item["link"]).first():
+        # Skip duplicates
+        if session.query(Article).filter_by(link=item.get("link")).first():
             continue
 
-        text = item["summary"] or item["title"]
+        # Ensure we have a text to process
+        text = item.get("summary") or item.get("title") or ""
+
+        # Ensure fetched_at is datetime
+        fetched_at = item.get("fetched_at")
+        if isinstance(fetched_at, str):
+            try:
+                fetched_at = datetime.fromisoformat(fetched_at)
+            except:
+                fetched_at = datetime.utcnow()
+        elif not fetched_at:
+            fetched_at = datetime.utcnow()
 
         try:
-            # NLP processing
-            topic = classify_topic(text)
-            sentiment = analyze_sentiment(item, topic)
-            summary = summarize_text(text)
+            # NLP with safe fallback
+            topic = classify_topic(text) or "GENERAL"
+            sentiment = analyze_sentiment(item, topic) or "LABEL_NEUTRAL"
+            summary = summarize_text(text) or text[:130]
 
-            # Create Article with NLP fields
             article = Article(
-                title=item["title"],
-                summary=item["summary"],
-                link=item["link"],
-                source=item["source"],
-                published=item["published"],
-                fetched_at=item["fetched_at"],
+                title=item.get("title") or "No Title",
+                summary=item.get("summary") or "",
+                link=item.get("link") or f"no-link-{count}",
+                source=item.get("source") or "Unknown",
+                published=item.get("published"),
+                fetched_at=fetched_at,
                 topic=topic,
                 sentiment=sentiment,
                 generated_summary=summary,
@@ -43,7 +54,6 @@ def store_articles(batch_size=5):
             count += 1
             added_count += 1
 
-            # Commit every batch_size articles
             if count % batch_size == 0:
                 try:
                     session.commit()
@@ -51,26 +61,19 @@ def store_articles(batch_size=5):
                     session.rollback()
                 except Exception as e:
                     session.rollback()
-                    print(f"Error committing batch: {e}")
+                    print(f"Batch commit error: {e}")
 
         except Exception as e:
-            # Log errors 
             print(f"Error processing article '{item.get('title', '')}': {e}")
             continue
 
-    # Final commit for remaining articles
+    # Commit remaining articles
     try:
         session.commit()
-    except IntegrityError:
-        session.rollback()
     except Exception as e:
         session.rollback()
-        print(f"Error committing final batch: {e}")
+        print(f"Final commit error: {e}")
 
     session.close()
     gc.collect()
     print(f"Fetched {len(articles)} articles, added {added_count} new")
-
-
-if __name__ == "__main__":
-    store_articles()
