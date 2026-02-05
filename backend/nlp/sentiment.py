@@ -1,5 +1,4 @@
-from functools import lru_cache
-from transformers import pipeline
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 TOPIC_BIAS = {
     "CONFLICT": -0.3,
@@ -11,31 +10,30 @@ TOPIC_BIAS = {
     "SPORTS": 0.05
 }
 
-@lru_cache(maxsize=1)
-def get_sentiment_analyzer():
-    return pipeline(
-        "sentiment-analysis",
-        model="distilbert-base-uncased-finetuned-sst-2-english"
-    )
+
+analyzer = SentimentIntensityAnalyzer()
 
 def analyze_sentiment(article, topic):
-    text = article["title"] + " " + article["summary"]
-
+    """
+    Analyze sentiment using VADER (very lightweight)
+    Returns: LABEL_POSITIVE, LABEL_NEGATIVE, or LABEL_NEUTRAL
+    """
+    text = article.get("title", "") + " " + article.get("summary", "")
+    
     if not text.strip():
-        return "NEUTRAL"
-
-    sentiment_analyzer = get_sentiment_analyzer()
-    result = sentiment_analyzer(text)[0]
-
-    score = result["score"]
-    if result["label"] == "NEGATIVE":
-        score = -score
-
-    adjusted_score = score + TOPIC_BIAS.get(topic, 0)
-
-    if adjusted_score > 0.25:
-        return "POSITIVE"
-    elif adjusted_score < -0.25:
-        return "NEGATIVE"
+        return "LABEL_NEUTRAL"
+    
+    
+    scores = analyzer.polarity_scores(text)
+    compound = scores['compound']  # -1 to 1
+    
+    # Apply topic bias
+    adjusted_score = compound + TOPIC_BIAS.get(topic, 0)
+    
+    # Classify
+    if adjusted_score > 0.05:
+        return "LABEL_POSITIVE"
+    elif adjusted_score < -0.05:
+        return "LABEL_NEGATIVE"
     else:
-        return "NEUTRAL"
+        return "LABEL_NEUTRAL"
