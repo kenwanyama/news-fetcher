@@ -3,18 +3,14 @@ from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from fastapi.responses import JSONResponse
+from fastapi import Header
+import os
 
+from backend.ingestion.store_articles import store_articles
 from backend.storage.database import Article, SessionLocal
-from backend.app.scheduler import start_scheduler
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    start_scheduler()
-    yield
-
-
-app = FastAPI(title="News Feed", lifespan=lifespan)
+app = FastAPI(title="News Feed")
 
 
 # Allow React frontend to access
@@ -40,6 +36,17 @@ def get_db():
         db.close()
 
 # API Endpoints
+
+CRON_SECRET = os.getenv("CRON_SECRET", "fallback-secret-for-dev")
+@app.post("/run-ingestion")
+def run_ingestion(x_cron_secret: str = Header(None)):
+    if x_cron_secret != CRON_SECRET:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    store_articles()
+    return {"status": "ingestion complete"}
+
+    
 
 @app.get("/articles", response_class=JSONResponse)
 def get_articles(limit: int = 50, db: Session = Depends(get_db)):
