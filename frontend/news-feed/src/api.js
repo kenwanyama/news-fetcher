@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE = process.env.REACT_APP_API_BASE || "news-fetcher-production-e5bb.up.railway.app";
+const API_BASE = process.env.REACT_APP_API_BASE || "https://news-fetcher-production-e5bb.up.railway.app";
 
 const api = axios.create({
   baseURL: API_BASE,
